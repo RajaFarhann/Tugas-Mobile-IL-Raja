@@ -41,8 +41,8 @@ fun HomeScreen(
             }
         }
         items(places, key = { it.id }) {
-            PlaceItem(place = it){ mentorId ->
-                navController.navigate(Screen.DetailPlace.route + "/$mentorId")
+            PlaceItem(place = it){ placeId ->
+                navController.navigate(Screen.DetailPlace.route + "/$placeId")
             }
         }
     }

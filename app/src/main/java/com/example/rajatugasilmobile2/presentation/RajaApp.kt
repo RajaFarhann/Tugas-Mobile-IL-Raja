@@ -2,7 +2,7 @@ package com.example.rajatugasilmobile2.presentation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrowseGallery
+import androidx.compose.material.icons.filled.CoPresent
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Topic
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,18 +16,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.rajatugasilmobile2.R
-import com.example.rajatugasilmobile2.ui.theme.RajaTugasILMobile2Theme
+import androidx.navigation.navArgument
+import com.example.rajatugasilmobile2.data.Data
 import com.example.rajatugasilmobile2.navigation.NavigationItem
 import com.example.rajatugasilmobile2.navigation.Screen
+import com.example.rajatugasilmobile2.presentation.detailScreen.DetailCategoryScreen
+import com.example.rajatugasilmobile2.presentation.detailScreen.DetailPlaceScreen
+import com.example.rajatugasilmobile2.presentation.detailScreen.DetailPlayerScreen
+import com.example.rajatugasilmobile2.ui.theme.RajaTugasILMobile2Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +46,7 @@ fun RajaApp(
             TopAppBar(
                 title = {
                     Text(text = "Infinite App")
-                }
+                },
             )
         },
         bottomBar = {
@@ -60,10 +64,42 @@ fun RajaApp(
             }
 
             composable(Screen.Gallery.route) {
-                GalleryScreen()
+                GalleryScreen(
+                    galleries = Data.Galleries,
+                    navController = navController
+                ){
+                    galleryId -> println("Gallery Id : $galleryId")
+                }
             }
             composable(Screen.About.route) {
-                HomeScreen(navController)
+                AboutScreen()
+            }
+            composable(
+                Screen.DetailCategory.route + "/{categoryId}",
+                arguments = listOf(navArgument("categoryId") { type = NavType.IntType })
+            ) { navBackStackEntry ->
+                DetailCategoryScreen(
+                    navController = navController,
+                    categoryId = navBackStackEntry.arguments?.getInt("categoryId")
+                )
+            }
+            composable(
+                Screen.DetailPlace.route + "/{placeId}",
+                arguments = listOf(navArgument("placeId") { type = NavType.IntType })
+            ) { navBackStackEntry ->
+                DetailPlaceScreen(
+                    navController = navController,
+                    placeId = navBackStackEntry.arguments?.getInt("placeId")
+                )
+            }
+            composable(
+                Screen.DetailPlayer.route + "/{galleryId}",
+                arguments = listOf(navArgument("galleryId") { type = NavType.IntType })
+            ) { navBackStackEntry ->
+                DetailPlayerScreen(
+                    navController = navController,
+                    galleryId = navBackStackEntry.arguments?.getInt("galleryId")
+                )
             }
         }
     }
@@ -88,12 +124,12 @@ private fun BottomBar(
             ),
             NavigationItem(
                 title = "Gallery",
-                icon = Icons.Default.BrowseGallery,
+                icon = Icons.Default.Topic,
                 screen = Screen.Gallery
             ),
             NavigationItem(
                 title = "About",
-                icon = Icons.Default.Topic,
+                icon = Icons.Default.CoPresent,
                 screen = Screen.About
             )
         )
