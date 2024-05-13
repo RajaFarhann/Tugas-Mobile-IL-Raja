@@ -19,7 +19,7 @@ import com.example.rajatugasilmobile2.ui.theme.RajaTugasILMobile2Theme
 fun AboutScreen() {
  Column {
      Image(
-         painter = painterResource(R.drawable.nathan),
+         painter = painterResource(R.drawable.aan),
          contentDescription = "Aan",
          contentScale = ContentScale.Crop,
          modifier = Modifier
